@@ -89,11 +89,11 @@ const getBooks = async function (req, res) {
 
   try {
     let filters = req.query
-
+     console.log(filters)
         if (Object.keys(filters).length == 0) {
             return res.status(400).send({ status: false, msg: "filters Are Required" })
         }
-    let availableBooks = await bookModel.find({ $and: [filters, { isDeleted: false }]}).select({ _id: 1, title: 1, excerpt: 1, userId: 1, category: 1, releasedAt: 1, reviews: 1 }).sort({ title: 1 })
+    let availableBooks = await bookModel.find({ $and: [filters, { deleted: false }]}).select({ _id: 1, title: 1, excerpt: 1, userId: 1, category: 1, releasedAt: 1, reviews: 1 }).sort({ title: 1 })
           if(availableBooks.length>0)
           {return res.status(200).send({ status: true, msg: "book  list", data: availableBooks})}
 

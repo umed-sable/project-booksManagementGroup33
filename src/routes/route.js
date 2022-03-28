@@ -12,9 +12,14 @@ router.post("/login", userController.login);
 
 router.post("/books", bookController.createBook);
 
-//router.get("/books", bookController.collegeDetails);
+router.get("/books", bookController.getBooks);
 
-//router.post("/books", bookController.collegeDetails);
+router.get("/books/:bookId", bookController.getBooksByPath);
+
+router.put("/books/:bookId", bookController.updateBooks);
+
+router.delete("/books/:bookId",bookController.deleteBook)
+
 
 
 module.exports = router;

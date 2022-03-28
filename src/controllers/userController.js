@@ -1,5 +1,5 @@
 const userModel = require("../models/userModel")
-const internModels = require("../models/internModels")
+//const bookModels = require("../models/bookModels")
 const jwt = require("jsonwebtoken")
 
 
@@ -16,107 +16,84 @@ const createUser = async function (req, res) {
   try {
 
     let data = req.body;
-    if (Object.keys(data).length > 0) {
-    //if(!data){return res.status(400).send({status:false,msg:"Data is required"})}
-    if(!isValid(data.title)){return res.status(400).send({status:false,msg:"Title is required"})}
+    if (!(Object.keys(data).length > 0)) { return res.status(400).send({ status: false, msg: "Invalid request Please provide details of an user" }) }
+
+    if (!isValid(data.title)) { return res.status(400).send({ status: false, msg: "Title is required" }) }
     if (!isValid(data.name)) { return res.status(400).send({ status: false, msg: "Name is required" }) }
     if (!isValid(data.phone)) { return res.status(400).send({ status: false, msg: "Phone Number is required" }) }
 
-    let checkPhone= await userModel.findOne({ phone: data.phone })
+
+    if (!(/^[6-9]\d{9}$/.test(data.phone))) {
+      res.status(400).send({ status: false, msg: "phone number should be valid number" })
+    }
+
+    let checkPhone = await userModel.findOne({ phone: data.phone })
     if (checkPhone) { return res.status(400).send({ msg: "phone Already exist" }) }
 
     if (!isValid(data.email)) { return res.status(400).send({ status: false, msg: "Email-Id is required" }) }
 
+    if (!(/^([a-zA-Z0-9\.-]+)@([a-zA-Z0-9-]+).([a-z]+)$/.test(data.email))) {
+      return res.status(400).send({ status: false, message: "Email should be a valid email address" })
+    }
+
     let checkEmail = await userModel.findOne({ email: data.email })
     if (checkEmail) { return res.status(400).send({ msg: "Email Already exist" }) }
 
-            
-    if (!isValid(data.password)) { return res.status(400).send({ status: false, msg: "Password is required" }) }
-    
-    
-      let password = data.password
-      let email = data.email
-      let phone=data.phone
-      if (email && password && phone) {
-
-        if (/^([a-zA-Z0-9\.-]+)@([a-zA-Z0-9-]+).([a-z]+)$/.test(email)) 
-        {
-        /*const emailRegex = /^([a-zA-Z0-9\.-]+)@([a-zA-Z0-9-]+).([a-z]+)$/;
-
-
-        if (!emailRegex.test(email.trim())) {
-          return res.status(400).send({
-            status: false, message: `${email} is not a valid email`,
-          })
-        
-    */
-   if (!isValid(data.email)) { return res.status(400).send({ status: false, msg: "Email-Id is required" }) }
-
-
-          if (/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/.test(password))
-         
-          {
-            if(/^[6-9]\d{9}$/.test(phone))
-            {
-
-            let savedData = await userModel.create(data)//.select({title:1,name:1,phone:1,email:1,password:1,address:1});
-            let userData = {
-              title:savedData.title,
-              name: savedData.name,
-              phone: savedData.phone,
-              email: savedData.email,
-              password: savedData.password,
-              address: savedData.address
-    
-            }
-    
-            return res.status(201).send({ Data: userData });
-
-          } else {
-            return res.status(400).send("Please enter valid Mobile Number")
-          }
-        }else{
-          return res.status(400).send("Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character")
-          }
-        } else {
-          return res.status(400).send("Not a valid email")
-        }
-      } else {
-        return res.status(400).send("email,password and phone number is empty")
-      }
-
+    if (!isValid(data.password)) {
+      return res.status(400).send({ status: false, msg: "Password is required" })
     }
 
-    else { return res.status(400).send({mgs:"please enter some data"}) }
+    if (!(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,15}$/.test(data.password))) {
+      return res.status(400).send({ status: false, msg: "Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character" })
+    }
 
-  } catch (err) {
+    let savedData = await userModel.create(data)
+    let userData = {
+      title: savedData.title,
+      name: savedData.name,
+      phone: savedData.phone,
+      email: savedData.email,
+      password: savedData.password,
+      address: savedData.address
 
-    return res.status(500).send({ ERROR: err.message })
+    }
+    return res.status(201).send({ status: true, data: userData })
 
   }
+  catch (error) {
+    res.status(500).send({ status: false, msg: error.message })
+  }
 }
-    
 
 
-// get college detalis controller.........................
 
-const login= async function (req, res) {
+
+
+
+const login = async function (req, res) {
 
   try {
     let data = req.body
-  
-      if (Object.keys(data).length > 0) {
+    let email = req.body.email;
+    let password = req.body.password;
+    if (!(Object.keys(data).length > 0)) { return res.status(400).send({ status: false, msg: "Invalid request Please provide details of an author" }) }
 
-        let userName = req.body.email;
-        if (!isValid(userName)) { return res.status(400).send({ status: false, msg: "Email-Id is required" }) }
 
-        if (/^([a-zA-Z0-9\.-]+)@([a-zA-Z0-9-]+).([a-z]+)$/.test(userName)) {
-        
-          let password = req.body.password;
-          if (!isValid(password)) { return res.status(400).send({ status: false, msg: "Password is required" }) }
+    if (!isValid(email)) { return res.status(400).send({ status: false, msg: "Email-Id is required" }) }
 
-          if (/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,15}$/.test(password)) {
-    let specificUser = await userModel.findOne({ email: userName, password: password });
+    if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))) {
+      return res.status(400).send({ status: false, msg: "Email should be a valid email address" })
+    }
+
+    if (!isValid(password)) {
+      return res.status(400).send({ status: false, msg: "Password is required" })
+    }
+
+    if (!(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,15}$/.test(password))) {
+      return res.status(400).send({ status: false, msg: "Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character" })
+    }
+
+    let specificUser = await userModel.findOne({ email: email, password: password });
 
     if (!specificUser)
       return res.status(404).send({
@@ -131,21 +108,12 @@ const login= async function (req, res) {
         batch: "Project3-Book-Management",
         organisation: "FunctionUp",
       },
-      "Book Management Key", { expiresIn: "1hr" }
+      "Book Management Key", { expiresIn: "1hr" },
     );
-
+    res.header('x-new-data', token);
     return res.status(201).send({ status: true, TOKEN: token });
-  } else {
-    return res.status(400).send("Password must contain minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character")
   }
-} else {
-  return res.status(400).send("Valid Email is Required")
-}
-}
 
-else { return res.status(400).send({ ERROR: "Bad Request" }) }
-
-}
   catch (err) {
     return res.status(500).send({ ERROR: err.message });
   }

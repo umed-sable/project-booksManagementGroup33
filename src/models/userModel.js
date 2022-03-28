@@ -23,15 +23,16 @@ const userSchema = new mongoose.Schema(
     email: {
       type: String,
       required: true,
-      match: [/^\w+([\.-]?\w+)@\w+([\. -]?\w+)(\.\w{2,3})+$/, 'Please fill a valid email address'],
+      match: [ /^([a-zA-Z0-9\.-]+)@([a-zA-Z0-9-]+).([a-z]+)$/, 'Please fill a valid email address'],
       unique: true,
-      lowerCase:true
+      
     },
     password: {
       type: String,
       required: true,
       match:[/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,15}$/,'Please enter valid Password'],
-      
+      maxlength:8,
+      maxlength:15
     },
     address: {
       street: {
@@ -47,7 +48,7 @@ const userSchema = new mongoose.Schema(
   },{ timestamps: true }
 );
 
-module.exports = mongoose.model("user", userSchema);
+module.exports = mongoose.model("users", userSchema);
 
 /*
 { 

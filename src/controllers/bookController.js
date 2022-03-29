@@ -16,7 +16,7 @@ const isValidObjectId = function (objectId) {
 }
 
 
-// create intern.....................................................................
+
 
 const createBook = async function (req, res) {
   try {

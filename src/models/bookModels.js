@@ -7,55 +7,55 @@ const bookSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true,
-        unique:true
+        unique: true
     },
     excerpt: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    userId: {
+        type: ObjectId,
+        required: true,
+        ref: "user",
+        // trim:true
+    },
+    ISBN: {
         type: String,
         required: true,
         unique: true,
         trim: true
     },
-    userId:{
-      type:ObjectId,
-      required:true,
-      ref:"user"
-    },
-    ISBN:{
-     type:String,
-     required:true,
-     unique:true,
-     trim: true
-    },
     category: {
         type: String,
         required: true,
         trim: true
-        
-    },
-    subcategory: {
-        type: String,
-    required:true,
-    trim: true,  
 
     },
-    
-    deleted: {
+    subcategory: {
+        type: [String],
+        required: true,
+        trim: true,
+
+    },
+
+    isDeleted: {
         type: Boolean,
         default: false
     },
-    reviews:{
-        type:Number,
+    reviews: {
+        type: Number,
         default: 0,
-       comment: Number
-     },
-     deletedAt:{
-          type:Date,
-          
-     },
-    releasedAt:{
-        type:Date,
-        required:true,
-        default:Date.now()
+        comment: Number
+    },
+    deletedAt: {
+        type: Date,
+
+    },
+    releasedAt: {
+        type: Date,
+        required: true,
+        default: Date.now()
 
     }
 

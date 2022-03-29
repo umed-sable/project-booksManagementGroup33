@@ -12,12 +12,12 @@ const reviewSchema = new mongoose.Schema({
     reviewedBy: {
         type:String,
         required:true, 
-        default: 'Guest', 
+        default: "Guest", 
         value: "reviewer's name"
     },
     reviewedAt: {
         type:Date, 
-        //required:true
+        required:true
     },
     rating: {
         type:Number,

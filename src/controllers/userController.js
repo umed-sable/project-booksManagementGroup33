@@ -32,7 +32,7 @@ const createUser = async function (req, res) {
 
     if (!isValid(data.email)) { return res.status(400).send({ status: false, msg: "Email-Id is required" }) }
 
-    if (!(/^([a-zA-Z0-9\.-]+)@([a-zA-Z0-9-]+).([a-z]+)$/.test(data.email))) {
+    if (!(/^([a-zA-Z0-9\.-]+)@([a-zA-Z0-9-]+).([a-z]+)$/.test(data.email.trim()))) {
       return res.status(400).send({ status: false, message: "Email should be a valid email address" })
     }
 
@@ -43,7 +43,7 @@ const createUser = async function (req, res) {
       return res.status(400).send({ status: false, msg: "Password is required" })
     }
 
-    if (!(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,15}$/.test(data.password))) {
+    if (!(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,15}$/.test(data.password.trim()))) {
       return res.status(400).send({ status: false, msg: "Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character" })
     }
 
@@ -105,7 +105,7 @@ const login = async function (req, res) {
 
     let token = jwt.sign(
       {
-        authId: specificUser._id,
+        userId: specificUser._id,
         batch: "Project3-Book-Management",
         organisation: "FunctionUp",
       },

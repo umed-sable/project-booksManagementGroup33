@@ -215,13 +215,13 @@ const deleteBook = async function (req, res) {
             {
                 return res.status(401).send({status:false,messege:"you are Not authorised person to delete this book"})
             }
-    
+    */
             //checking if book is already deleted 
             else if(findBook.deleted==true)
             {
                 return res.status(400).send({status:false,messege:"the book is already deleted"})
             }
-    */
+    
     //if book is not deleted 
     else {
       const deleteData = await bookModel.findOneAndUpdate({ _id: { $in: findBook } },

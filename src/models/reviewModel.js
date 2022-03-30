@@ -11,7 +11,7 @@ const reviewSchema = new mongoose.Schema({
      },
     reviewedBy: {
         type:String,
-        required:true, 
+        //required:true, 
         default: "Guest", 
         value: "reviewer's name"
     },
@@ -21,8 +21,6 @@ const reviewSchema = new mongoose.Schema({
     },
     rating: {
         type:Number,
-         min: 1,
-         max :5,
         required:true
     },
     review: {
@@ -34,6 +32,6 @@ const reviewSchema = new mongoose.Schema({
     },
   },
 
-{ timeStamps: true })
+{ timestamps: true })
 
 module.exports = mongoose.model('review', reviewSchema)

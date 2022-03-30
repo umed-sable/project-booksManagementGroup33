@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      enum: ["Mr", "Mrs", "Miss"],
+      enum: ["Mr", "Mrs", "Miss","Mast"],
       required: true,
       trim: true,
     },
@@ -42,7 +42,8 @@ const userSchema = new mongoose.Schema(
         type: String
       },
       pincode: {
-        type: String
+        type: String,
+        match:[/^(\d{4}|\d{6})$/,"Please enter valid pincode"]
       },
     },
   },{ timestamps: true }

@@ -46,7 +46,7 @@ const bookSchema = new mongoose.Schema({
     reviews: {
         type: Number,
         default: 0,
-        comment: Number
+      
     },
     deletedAt: {
         type: Date,
@@ -60,6 +60,6 @@ const bookSchema = new mongoose.Schema({
     }
 
 },
-    { timeStamps: true })
+    { timestamps: true });
 
 module.exports = mongoose.model('books', bookSchema)

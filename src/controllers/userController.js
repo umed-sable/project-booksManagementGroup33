@@ -1,9 +1,8 @@
 const userModel = require("../models/userModel")
-//const bookModels = require("../models/bookModels")
 const jwt = require("jsonwebtoken")
 
 
-
+//validation.....................................................................
 const isValid = function (value) {
   if (typeof value == undefined || value == null) return false
   if (typeof value === 'string' && value.trim().length === 0) return false
@@ -15,7 +14,7 @@ const isValidTitle = function (title) {
 }
 
 
-//CREATE AUTHOR
+//Create author.....................................................................
 const createUser = async function (req, res) {
   try {
 
@@ -58,16 +57,7 @@ const createUser = async function (req, res) {
     }
 
     let savedData = await userModel.create(data)
-    // let userData = {
-    //   _id: savedData._id,
-    //   title: savedData.title,
-    //   name: savedData.name,
-    //   phone: savedData.phone,
-    //   email: savedData.email,
-    //   password: savedData.password,
-    //   address: savedData.address
-
-    // }
+  
     return res.status(201).send({ status: true, data: savedData })
 
   }
@@ -79,7 +69,7 @@ const createUser = async function (req, res) {
 
 
 
-
+//login..........................................................................................
 
 const login = async function (req, res) {
 
@@ -119,9 +109,9 @@ const login = async function (req, res) {
         batch: "Project3-Book-Management",
         organisation: "FunctionUp",
       },
-      "Book Management Key", { expiresIn: "5hr" },
+      "Book_Management_Key", { expiresIn: "2hr" },
     );
-    res.header('x-new-data', token);
+    res.header('x-api-key', token);
     return res.status(201).send({ status: true, TOKEN: token });
   }
 

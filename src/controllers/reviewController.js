@@ -33,7 +33,6 @@ const createReview = async function (req, res) {
         console.log(bookDetail)
         if (!bookDetail) { return res.status(400).send({ status: false, message: "book does not exists" }) }
 
-       // if (!isValid(reviewedBy)) { return res.status(400).send({ status: false, message: "reviewedBy is required" }) }
 
         if (!isValid(reviewedAt)) { return res.status(400).send({ status: false, message: "reviewedAt is required" }) }
 
@@ -56,9 +55,10 @@ const createReview = async function (req, res) {
             reviewedBy: newReviewData.reviewedBy,
             reviewedAt: newReviewData.reviewedAt,
             rating: newReviewData.rating,
-            review: newReviewData.review,
-
+            reviews: newReviewData.review,
+            
         }
+        let increasedreview = await bookModel.findOneAndUpdate({_id:bookId,isDeleted:false},{$inc:{reviews:1}},{new:true})
 
         res.status(201).send({ status: true, message: "Thanks for reviewing this book..!!", data: reviewData })
 
@@ -155,17 +155,18 @@ const deleteReview = async function (req, res) {
         const deleteReviewData = await reviewModel.findOneAndUpdate({ _id: deleteReviewId },
             { $set: { isDeleted: true } },
             { new: true })
-       
+
+
+            let deleteReview = await bookModel.findOneAndUpdate({ _id: findBookById._id }, { $inc: { reviews: -1 } })
+
         if (deleteReviewData != 0) { return res.status(200).send({ status: true, message: "review deleted successfullly." }) }
 
-        else {
+   
 
+
+        else {
             return res.status(400).send({ Status: false, data: "bookID and reviewedId doesn't match" })
         }
-
-
-
-
 
     }
     catch (error) {

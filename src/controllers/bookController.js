@@ -122,25 +122,29 @@ module.exports.getBooks = getBooks
 //getBooksByPath......................................................
 
 const getBooksByPath = async function (req, res) {
+ 
   try {
     let bookId = req.params.bookId
-    if (!(isValid(bookId) && isValidObjectId(bookId))) { return res.status(400).send({ status: false, message: "Valid bookId is required" }) }
-
+    if (!(isValid(bookId))) { return res.status(400).send({ status: false, message: "bookId is required" }) }
+  if(!isValidObjectId(bookId)) { return res.status(400).send({ status: false, message: "Valid bookId is required" }) }
+    
+    
     let book = await bookModel.findOne({ _id: bookId, isDeleted: false })
     if (!book) { return res.status(400).send({ status: false, message: "no data found" }) }
 
 
-    let addReview = await reviewModel.find({ bookId: bookId, isDeleted: false }).select({ _id: 1, bookId: 1, reviewedBy: 1, reviewedAt: 1, rating: 1, review: 1 })//.count()
+    let addReview = await reviewModel.find({ bookId: bookId, isDeleted: false }).select({ _id: 1, bookId: 1, reviewedBy: 1, reviewedAt: 1, rating: 1, reviews: 1 })//.count()
     if (!addReview) { return res.status(400).send({ status: false, data: book, message: "No reviews for this book" }) }
 
     const addingCollege = {
+      _id:book._id,
       title: book.title,
       excerpt: book.excerpt,
       userId: book.userId,
       category: book.category,
       subcategory: book.subcategory,
       isDeleted: book.isDeleted,
-      //reviews:addReview,
+      reviews:book.reviews,
       isDeleted: book.isDeleted,
       releasedAt: book.releasedAt,
       addReview
@@ -153,18 +157,6 @@ const getBooksByPath = async function (req, res) {
   }
 }
 
-//     const addingCollege={
-//     title: book.title,
-//     excerpt:book.excerpt,
-//     userId: book.userId,
-//     category:book.category,
-//     subcategory:book.subcategory,
-//     isDeleted:book.isDeleted ,
-//     //reviews:addReview,
-//     isDeleted: isDeleted ? new Date() : null,
-//     releasedAt: book.releasedAt,
-//     addReview
-//    }
 
 
 

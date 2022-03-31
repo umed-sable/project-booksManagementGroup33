@@ -25,11 +25,11 @@ router.delete("/books/:bookId",middleware.authentication,middleware.authorizatio
 
 
 //review................................................
-router.post("/books/:bookId/review", middleware.authentication,reviewController.createReview);
+router.post("/books/:bookId/review", reviewController.createReview);
 
-router.put("/books/:bookId/review/:reviewId", middleware.authentication,middleware.authorization, reviewController.updateReview);
+router.put("/books/:bookId/review/:reviewId", reviewController.updateReview);
 
-router.delete("/books/:bookId/review/:reviewId", middleware.authentication,middleware.authorization,reviewController.deleteReview)
+router.delete("/books/:bookId/review/:reviewId",reviewController.deleteReview)
 
 
 module.exports = router;

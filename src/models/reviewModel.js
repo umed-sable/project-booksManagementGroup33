@@ -11,7 +11,7 @@ const reviewSchema = new mongoose.Schema({
      },
     reviewedBy: {
         type:String,
-        //required:true, 
+        required:true, 
         default: "Guest", 
         value: "reviewer's name"
     },
@@ -23,7 +23,7 @@ const reviewSchema = new mongoose.Schema({
         type:Number,
         required:true
     },
-    review: {
+    reviews: {
         type:String
          },
     isDeleted: {

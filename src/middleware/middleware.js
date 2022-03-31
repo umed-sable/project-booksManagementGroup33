@@ -17,7 +17,7 @@ const authentication = function (req, res, next) {
         }
 
         let time=Math.floor(Date.now()/1000)
-        if(decodedToken.exp<time){
+        if(decodedToken.expiresIn<time){
             return  res.status(401).send({ status: false, message: "token is expired,please login again" });
         }
        req.decodedToken = decodedToken

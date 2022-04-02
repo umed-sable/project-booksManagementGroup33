@@ -33,7 +33,8 @@ const createReview = async function (req, res) {
         console.log(bookDetail)
         if (!bookDetail) { return res.status(400).send({ status: false, message: "book does not exists" }) }
 
-
+        if (!isValid(reviewedBy)) { return res.status(400).send({ status: false, message: "reviewedBy is required" }) }
+        
         if (!isValid(reviewedAt)) { return res.status(400).send({ status: false, message: "reviewedAt is required" }) }
 
         if (!/((\d{4}[\/-])(\d{2}[\/-])(\d{2}))/.test(reviewedAt)) {
@@ -43,6 +44,7 @@ const createReview = async function (req, res) {
         if (!isValid(review)) { return res.status(400).send({ status: false, message: "please provide valid review" }) }
 
         if (!isValid(rating)) { return res.status(400).send({ status: false, message: "rating is not valid " }) }
+        
 
         if (!/^[1-5]$/.test(rating)) {
             return res.status(400).send({ status: false, message: "Rating should be between 1-5" })
